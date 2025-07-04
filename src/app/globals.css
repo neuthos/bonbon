@@ -2,26 +2,54 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
-}
+/* Mobile responsive adjustments */
+@media (max-width: 640px) {
+  .ant-table-tbody > tr > td {
+    padding: 4px 8px !important;
+    font-size: 12px !important;
+  }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
+  .ant-table-thead > tr > th {
+    padding: 4px 8px !important;
+    font-size: 12px !important;
+  }
+
+  .ant-card-body {
+    padding: 12px !important;
+  }
+
+  .ant-statistic-title {
+    font-size: 12px !important;
+  }
+
+  .ant-statistic-content {
+    font-size: 14px !important;
+  }
+
+  .ant-tag {
+    font-size: 10px !important;
+    padding: 0 4px !important;
+  }
+
+  .ant-select-selector {
+    font-size: 12px !important;
   }
 }
 
-body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+/* Custom scrollbar for mobile */
+.ant-table-body {
+  overflow-x: auto;
+}
+
+.ant-table-body::-webkit-scrollbar {
+  height: 4px;
+}
+
+.ant-table-body::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+.ant-table-body::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 2px;
 }
