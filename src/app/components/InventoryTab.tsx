@@ -29,10 +29,18 @@ export default function InventoryTab() {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
   const [form] = Form.useForm();
 
   useEffect(() => {
     fetchProducts();
+
+    // Check if mobile after component mounts
+    const checkMobile = () => setIsMobile(window.innerWidth < 640);
+    checkMobile();
+
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
   }, []);
 
   const fetchProducts = async () => {
@@ -147,9 +155,7 @@ export default function InventoryTab() {
           okText="Yes"
           cancelText="No"
         >
-          <Button type="text" danger size="small">
-            Hapus
-          </Button>
+          <Button type="text" danger size="small" />
         </Popconfirm>
       ),
       width: 60,
@@ -163,7 +169,7 @@ export default function InventoryTab() {
         <Button
           type="primary"
           onClick={() => setIsModalOpen(true)}
-          block={window.innerWidth < 640}
+          block={isMobile}
         >
           Add Product
         </Button>
@@ -189,7 +195,7 @@ export default function InventoryTab() {
         open={isModalOpen}
         onCancel={() => setIsModalOpen(false)}
         footer={null}
-        width={window.innerWidth < 640 ? "90%" : 500}
+        width={isMobile ? "90%" : 500}
       >
         <Form form={form} layout="vertical" onFinish={handleSubmit}>
           <Form.Item
@@ -248,17 +254,10 @@ export default function InventoryTab() {
 
           <Form.Item>
             <div className="flex flex-col sm:flex-row gap-2">
-              <Button
-                type="primary"
-                htmlType="submit"
-                block={window.innerWidth < 640}
-              >
+              <Button type="primary" htmlType="submit" block={isMobile}>
                 Save
               </Button>
-              <Button
-                onClick={() => setIsModalOpen(false)}
-                block={window.innerWidth < 640}
-              >
+              <Button onClick={() => setIsModalOpen(false)} block={isMobile}>
                 Cancel
               </Button>
             </div>

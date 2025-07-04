@@ -16,7 +16,6 @@ import {
   Col,
   Card,
   Statistic,
-  Drawer,
 } from "antd";
 import {
   PlusOutlined,
@@ -24,9 +23,6 @@ import {
   EditOutlined,
   DownloadOutlined,
   FilterOutlined,
-  DollarOutlined,
-  CheckCircleOutlined,
-  ClockCircleOutlined,
   CloudDownloadOutlined,
 } from "@ant-design/icons";
 import type {ColumnsType} from "antd/es/table";
@@ -67,11 +63,19 @@ export default function OrderTab() {
   const [dateRange, setDateRange] = useState<
     [dayjs.Dayjs | null, dayjs.Dayjs | null] | null
   >(null);
+  const [isMobile, setIsMobile] = useState(false);
   const [form] = Form.useForm();
 
   useEffect(() => {
     fetchProducts();
     fetchOrders();
+
+    // Check if mobile after component mounts
+    const checkMobile = () => setIsMobile(window.innerWidth < 640);
+    checkMobile();
+
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
   }, []);
 
   useEffect(() => {
@@ -190,10 +194,9 @@ export default function OrderTab() {
     }
   };
 
-  // Fix perhitungan: Total Bayar = Harga Modal * Quantity (untuk supplier)
   const calculateOrderValues = (order: Order) => {
     const totalHargaJual = order.product.priceJual * order.quantity;
-    const totalBayar = order.product.priceModal * order.quantity; // Total bayar ke supplier
+    const totalBayar = order.product.priceModal * order.quantity;
     const keuntungan =
       totalHargaJual - order.discount - order.admin - totalBayar;
 
@@ -529,7 +532,7 @@ export default function OrderTab() {
           form.resetFields();
         }}
         footer={null}
-        width={window.innerWidth < 640 ? "95%" : 600}
+        width={isMobile ? "95%" : 600}
       >
         <Form form={form} layout="vertical" onFinish={handleSubmit}>
           <Row gutter={16}>
@@ -637,11 +640,7 @@ export default function OrderTab() {
 
           <Form.Item>
             <div className="flex flex-col sm:flex-row gap-2">
-              <Button
-                type="primary"
-                htmlType="submit"
-                block={window.innerWidth < 640}
-              >
+              <Button type="primary" htmlType="submit" block={isMobile}>
                 {editingOrder ? "Update" : "Save"}
               </Button>
               <Button
@@ -650,7 +649,7 @@ export default function OrderTab() {
                   setEditingOrder(null);
                   form.resetFields();
                 }}
-                block={window.innerWidth < 640}
+                block={isMobile}
               >
                 Cancel
               </Button>
