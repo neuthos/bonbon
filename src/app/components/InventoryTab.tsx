@@ -155,7 +155,9 @@ export default function InventoryTab() {
           okText="Yes"
           cancelText="No"
         >
-          <Button type="text" danger size="small" />
+          <Button type="text" danger size="small">
+            Hapus
+          </Button>
         </Popconfirm>
       ),
       width: 60,
